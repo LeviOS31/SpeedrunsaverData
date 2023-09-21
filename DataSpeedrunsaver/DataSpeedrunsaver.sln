@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33801.468
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSpeedrunsaver", "DataSpeedrunsaver.csproj", "{D12217F5-CBE4-4004-B2EE-4E0C4B29EE60}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D12217F5-CBE4-4004-B2EE-4E0C4B29EE60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D12217F5-CBE4-4004-B2EE-4E0C4B29EE60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D12217F5-CBE4-4004-B2EE-4E0C4B29EE60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D12217F5-CBE4-4004-B2EE-4E0C4B29EE60}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14CA2DA5-F985-4A13-BE51-1DC86D0AE9E1}
+	EndGlobalSection
+EndGlobal
