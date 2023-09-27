@@ -1,7 +1,7 @@
-﻿using DataSpeedrunsaver.Models;
-using Microsoft.AspNetCore.Mvc;
-using DataSpeedrunsaver.Data;
-using DataSpeedrunsaver.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using DataBase.Data;
+using Logic.Container;
+using Interfaces.RequestBody;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -10,39 +10,43 @@ namespace DataSpeedrunsaver.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
+        private readonly DBSpeedrunsaverContext _context;
+        private readonly UserContainer _userContainer;
 
         public UserController(ILogger<UserController> logger)
         {
+            _context = new DBSpeedrunsaverContext();
+            _userContainer = new UserContainer(_context);
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetUsers")]
-        public IEnumerable<User> Get()
+        [HttpGet]
+        [Route("/User/All")]
+        public async Task<IActionResult> GetUsers()
         {
-            Console.WriteLine("GetUsers");
-            using (var db = new DBSpeedrunsaverContext())
-            {
-                return db.Users.ToList();
-            }
+            return Ok(await _userContainer.GetUsers());
         }
 
-        [HttpPost(Name = "CreateUser")]
-        public void Post([FromBody] User user)
+        [HttpGet]
+        [Route("/User/Specific")]
+        public async Task<IActionResult> GetUser(int id)
         {
-            Console.WriteLine("CreateUser");
-            using (var db = new DBSpeedrunsaverContext()) 
-            {
-                var newUser = new User 
-                {
-                    Username = user.Username,
-                    Password = user.Password,
-                    Country = user.Country,
-                    Email = user.Email,
-                    Admin = user.Admin
-                };
+            return Ok(await _userContainer.GetUser(id));
+        }
 
-                db.Users.Add(newUser);
-                db.SaveChanges();
+        [HttpPost]
+        [Route("/User/Create")]
+        public async Task<IActionResult> CreateUser([FromBody] UserBody body)
+        {
+            try 
+            {
+                await _userContainer.CreateUser(body);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to create user: " + e.Message);
             }
         }
     }

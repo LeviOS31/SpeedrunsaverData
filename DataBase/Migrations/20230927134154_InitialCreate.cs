@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DataSpeedrunsaver.Migrations
+namespace DataBase.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,23 +40,6 @@ namespace DataSpeedrunsaver.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Platforms", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Polls",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Option1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Option2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Votes1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Votes2 = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Polls", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -189,7 +171,7 @@ namespace DataSpeedrunsaver.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CommentText = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SpeedrunId = table.Column<int>(type: "int", nullable: true),
+                    SpeedrunId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -259,9 +241,6 @@ namespace DataSpeedrunsaver.Migrations
 
             migrationBuilder.DropTable(
                 name: "GamePlatforms");
-
-            migrationBuilder.DropTable(
-                name: "Polls");
 
             migrationBuilder.DropTable(
                 name: "Rules");

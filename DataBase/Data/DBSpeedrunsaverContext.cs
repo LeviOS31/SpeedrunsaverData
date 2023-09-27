@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using DataSpeedrunsaver.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Interfaces.Models;
+using Interfaces.DB;
 
-namespace DataSpeedrunsaver.Data
+namespace DataBase.Data
 {
-    public class DBSpeedrunsaverContext: DbContext
+    public class DBSpeedrunsaverContext: DbContext, IDBContext
     {
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Rule> Rules { get; set; }
-        public DbSet<Poll> Polls { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Speedrun> Runs { get; set; }
         public DbSet<Comment> Comments { get; set; }
@@ -34,6 +33,11 @@ namespace DataSpeedrunsaver.Data
                 .HasOne(gp => gp.Platform)
                 .WithMany(p => p.GamePlatforms)
                 .HasForeignKey(gp => gp.PlatformId);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await base.SaveChangesAsync();
         }
     }
 }

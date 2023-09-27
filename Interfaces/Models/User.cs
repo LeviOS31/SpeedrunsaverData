@@ -1,4 +1,4 @@
-﻿namespace DataSpeedrunsaver.Models
+﻿namespace Interfaces.Models
 {
     public class User
     {
