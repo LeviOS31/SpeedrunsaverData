@@ -28,16 +28,31 @@ namespace Logic.Container
 
         public async Task CreateUser(UserBody body) 
         {
+            
+            string password = BCrypt.Net.BCrypt.HashPassword(body.Password);
             var user = new User
             {
                 Username = body.Username,
-                Password = body.Password,
+                Password = password,
                 Country = body.Country,
                 Email = body.Email,
                 Admin = body.Admin
             };
             await _dBContext.Users.AddAsync(user);
             await _dBContext.SaveChangesAsync();
+        }
+
+        public async Task<int> ValidateUser(UserBody body) 
+        {
+            User user = await _dBContext.Users.FirstOrDefaultAsync(u => u.Username == body.Username);
+            if(user != null) 
+            {
+                if (BCrypt.Net.BCrypt.Verify(body.Password, user.Password))
+                {
+                    return user.Id;
+                }
+            }
+            return 0;
         }
     }
 }

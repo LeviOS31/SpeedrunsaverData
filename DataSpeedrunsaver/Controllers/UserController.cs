@@ -49,5 +49,28 @@ namespace DataSpeedrunsaver.Controllers
                 return StatusCode(500, "Something went wrong when trying to create user: " + e.Message);
             }
         }
+
+        [HttpPost]
+        [Route("/User/Validation")]
+        public async Task<IActionResult> ValidateUser([FromBody] UserBody body) 
+        {
+            try 
+            {
+                int id = await _userContainer.ValidateUser(body);
+                if (id != 0)
+                {
+                    return Ok(id);
+                }
+                else 
+                {
+                    throw new Exception("Invalid username or password");
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to validate user: " + e.Message);
+            }
+        }
     }
 }

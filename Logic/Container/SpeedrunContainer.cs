@@ -1,5 +1,6 @@
 ﻿using Interfaces.DB;
 using Interfaces.Models;
+using Interfaces.RequestBody;
 using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Container
@@ -16,6 +17,30 @@ namespace Logic.Container
         public async Task<List<Speedrun>> GetSpeedruns()
         {
             return await _dbContext.Runs.ToListAsync();
+        }
+
+        public async Task<Speedrun> GetSpeedrun(int id)
+        {
+            return await _dbContext.Runs.FindAsync(id);
+        }
+
+        public async Task CreateSpeedrun(SpeedrunBody body) 
+        {
+            Speedrun speedrun = new Speedrun
+            {
+                SpeedrunName = body.SpeedrunName,
+                SpeedrunDescription = body.SpeedrunDescription,
+                categoryId = body.CategoryId,
+                platformId = body.PlatformId,
+                userId = body.UserId,
+                time = body.Time,
+                Date = body.Date,
+                VideoLink = body.VideoLink,
+                status = 0
+            };
+
+            await _dbContext.Runs.AddAsync(speedrun);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

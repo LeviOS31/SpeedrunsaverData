@@ -24,15 +24,16 @@ namespace Logic.Container
             return await _dbContext.Games.FindAsync(id);
         }
 
-        public async Task AddGame(GameBody body)
+        public async Task CreateGame(GameBody body)
         {
-            Game game = new Game();
-
-            game.GameName = body.GameName;
-            game.GameDescription = body.GameDescription;
-            game.Developer = body.Developer;
-            game.Publisher = body.Publisher;
-            game.ReleaseDate = body.ReleaseDate;
+            Game game = new Game
+            {
+                GameName = body.GameName,
+                GameDescription = body.GameDescription,
+                Developer = body.Developer,
+                Publisher = body.Publisher,
+                ReleaseDate = body.ReleaseDate
+            };
 
             await _dbContext.Games.AddAsync(game);
             await _dbContext.SaveChangesAsync();
