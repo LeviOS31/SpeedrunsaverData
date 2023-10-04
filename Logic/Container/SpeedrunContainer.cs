@@ -21,7 +21,20 @@ namespace Logic.Container
 
         public async Task<Speedrun> GetSpeedrun(int id)
         {
-            return await _dbContext.Runs.FindAsync(id);
+            return await _dbContext.Runs
+                .Include(x => x.Category)
+                .Include(x => x.User)
+                .Include(x => x.Platform)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<List<Speedrun>> GetSpeedrunsByCategory(int id)
+        {
+            return await _dbContext.Runs
+                .Include(x => x.User)
+                .Include(x => x.Platform)
+                .Where(x => x.categoryId == id)
+                .ToListAsync();
         }
 
         public async Task CreateSpeedrun(SpeedrunBody body) 

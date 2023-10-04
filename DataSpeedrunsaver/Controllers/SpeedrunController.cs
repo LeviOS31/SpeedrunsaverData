@@ -33,6 +33,13 @@ namespace DataSpeedrunsaver.Controllers
             return Ok(await _speedrunContainer.GetSpeedrun(id));
         }
 
+        [HttpGet]
+        [Route("/Speedrun/Category")]
+        public async Task<IActionResult> GetSpeedrunsByCategory(int id)
+        {
+            return Ok(await _speedrunContainer.GetSpeedrunsByCategory(id));
+        }
+
         [HttpPost]
         [Route("/Speedrun/Create")]
         public async Task<IActionResult> CreateSpeedrun([FromBody] SpeedrunBody body)

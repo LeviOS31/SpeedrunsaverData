@@ -33,6 +33,13 @@ namespace DataSpeedrunsaver.Controllers
             return Ok(await _categoryContainer.GetCategory(id));
         }
 
+        [HttpGet]
+        [Route("/Category/Game")]
+        public async Task<IActionResult> GetCategoriesByGameId(int gameId)
+        {
+            return Ok(await _categoryContainer.GetCategoriesByGameId(gameId));
+        }
+
         [HttpPost]
         [Route("/Category/Create")]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryBody body) 

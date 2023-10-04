@@ -30,6 +30,7 @@ namespace Logic.Container
             {
                 GameName = body.GameName,
                 GameDescription = body.GameDescription,
+                GameImage = body.GameImage,
                 Developer = body.Developer,
                 Publisher = body.Publisher,
                 ReleaseDate = body.ReleaseDate

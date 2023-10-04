@@ -6,6 +6,7 @@ namespace Interfaces.Models
     {
         public int Id { get; set; }
         public string GameName { get; set; }
+        public string GameImage { get; set; }
         public string GameDescription { get; set; }
         public string Developer { get; set; }
         public string Publisher { get; set; }

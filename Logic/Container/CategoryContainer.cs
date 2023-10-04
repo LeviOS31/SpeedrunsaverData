@@ -23,6 +23,11 @@ namespace Logic.Container
         {
             return await _dbContext.Categories.FindAsync(id);
         }
+
+        public async Task<List<Category>> GetCategoriesByGameId(int gameId)
+        {
+            return await _dbContext.Categories.Where(x => x.gameId == gameId).ToListAsync();
+        }
         
         public async Task CreateCategory(CategoryBody categoryBody) 
         {
