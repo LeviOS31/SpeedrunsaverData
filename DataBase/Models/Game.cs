@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Interfaces.Models
+namespace DataBase.Models
 {
     public class Game
     {

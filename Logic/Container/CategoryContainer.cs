@@ -1,5 +1,5 @@
-﻿using Interfaces.DB;
-using Interfaces.Models;
+﻿using Interfaces.DB.DAL;
+using Interfaces.DTO;
 using Microsoft.EntityFrameworkCore;
 using Interfaces.RequestBody;
 
@@ -7,39 +7,28 @@ namespace Logic.Container
 {
     public class CategoryContainer
     {
-        private readonly IDBContext _dbContext;
+        private readonly ICategoryDAL categoryDAL;
 
-        public CategoryContainer(IDBContext dbContext)
+        public CategoryContainer(ICategoryDAL _categoryDAL)
         {
-            _dbContext = dbContext;
+            categoryDAL = _categoryDAL;
         }
 
-        public async Task<List<Category>> GetCategories()
+        public async Task<List<CategoryDTO>> GetCategories()
         {
-            return await _dbContext.Categories.ToListAsync();
         }
 
-        public async Task<Category> GetCategory(int id)
+        public async Task<CategoryDTO> GetCategory(int id)
         {
-            return await _dbContext.Categories.FindAsync(id);
         }
 
-        public async Task<List<Category>> GetCategoriesByGameId(int gameId)
+        public async Task<List<CategoryDTO>> GetCategoriesByGameId(int gameId)
         {
-            return await _dbContext.Categories.Where(x => x.gameId == gameId).ToListAsync();
         }
         
         public async Task CreateCategory(CategoryBody categoryBody) 
         {
-            Category category = new Category
-            {
-                CategoryName = categoryBody.CategoryName,
-                CategoryDescription = categoryBody.CategoryDescription,
-                gameId = categoryBody.gameId
-            };
-
-            await _dbContext.Categories.AddAsync(category);
-            await _dbContext.SaveChangesAsync();
+            CategoryDTO category;
         }
     }
 }

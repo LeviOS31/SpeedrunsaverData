@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Interfaces.Models;
-using Interfaces.DB;
+using DataBase.Models;
 
 namespace DataBase.Data
 {
-    public class DBSpeedrunsaverContext: DbContext, IDBContext
+    public class DBSpeedrunsaverContext: DbContext
     {
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<Category> Categories { get; set; }
