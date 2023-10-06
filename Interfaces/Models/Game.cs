@@ -11,6 +11,6 @@ namespace Interfaces.Models
         public string Developer { get; set; }
         public string Publisher { get; set; }
         public DateTime ReleaseDate { get; set; }
-        public ICollection<GamePlatform> GamePlatforms { get; set; }
+        public List<Platform> Platforms { get; set; }
     }
 }

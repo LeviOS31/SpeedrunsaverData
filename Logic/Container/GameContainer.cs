@@ -21,7 +21,16 @@ namespace Logic.Container
 
         public async Task<Game> GetGame(int id)
         {
-            return await _dbContext.Games.FindAsync(id);
+            Game game = await _dbContext.Games
+                .FirstOrDefaultAsync(g => g.Id == id);
+            
+/*            List<GamePlatform> gameplatforms = await _dbContext.GamePlatforms
+                .Where(gp => gp.GameId == id)
+                .ToListAsync();
+
+            game.GamePlatforms = gameplatforms;*/
+
+            return game;
         }
 
         public async Task CreateGame(GameBody body)

@@ -13,7 +13,6 @@ namespace DataBase.Data
         public DbSet<Speedrun> Runs { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<GamePlatform> GamePlatforms { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
@@ -23,16 +22,9 @@ namespace DataBase.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GamePlatform>()
-                .HasKey(gp => new { gp.GameId, gp.PlatformId });
-            modelBuilder.Entity<GamePlatform>()
-                .HasOne(gp => gp.Game)
-                .WithMany(g => g.GamePlatforms)
-                .HasForeignKey(gp => gp.GameId);
-            modelBuilder.Entity<GamePlatform>()
-                .HasOne(gp => gp.Platform)
-                .WithMany(p => p.GamePlatforms)
-                .HasForeignKey(gp => gp.PlatformId);
+            modelBuilder.Entity<Platform>()
+                .HasMany(p => p.Games)
+                .WithMany(g => g.Platforms);
         }
 
         public async Task<int> SaveChangesAsync()

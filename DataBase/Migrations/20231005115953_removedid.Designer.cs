@@ -4,6 +4,7 @@ using DataBase.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DBSpeedrunsaverContext))]
-    partial class DBSpeedrunsaverContextModelSnapshot : ModelSnapshot
+    [Migration("20231005115953_removedid")]
+    partial class removedid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace DataBase.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GamePlatform", b =>
-                {
-                    b.Property<int>("GamesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlatformsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GamesId", "PlatformsId");
-
-                    b.HasIndex("PlatformsId");
-
-                    b.ToTable("GamePlatform");
-                });
 
             modelBuilder.Entity("Interfaces.Models.Category", b =>
                 {
@@ -128,6 +116,21 @@ namespace DataBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("Interfaces.Models.GamePlatform", b =>
+                {
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlatformId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GameId", "PlatformId");
+
+                    b.HasIndex("PlatformId");
+
+                    b.ToTable("GamePlatforms");
                 });
 
             modelBuilder.Entity("Interfaces.Models.Platform", b =>
@@ -257,21 +260,6 @@ namespace DataBase.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GamePlatform", b =>
-                {
-                    b.HasOne("Interfaces.Models.Game", null)
-                        .WithMany()
-                        .HasForeignKey("GamesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Interfaces.Models.Platform", null)
-                        .WithMany()
-                        .HasForeignKey("PlatformsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Interfaces.Models.Category", b =>
                 {
                     b.HasOne("Interfaces.Models.Game", "Game")
@@ -300,6 +288,25 @@ namespace DataBase.Migrations
                     b.Navigation("Speedrun");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Interfaces.Models.GamePlatform", b =>
+                {
+                    b.HasOne("Interfaces.Models.Game", "Game")
+                        .WithMany("GamePlatforms")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Interfaces.Models.Platform", "Platform")
+                        .WithMany("GamePlatforms")
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Platform");
                 });
 
             modelBuilder.Entity("Interfaces.Models.Rule", b =>
@@ -338,6 +345,16 @@ namespace DataBase.Migrations
                     b.Navigation("Platform");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Interfaces.Models.Game", b =>
+                {
+                    b.Navigation("GamePlatforms");
+                });
+
+            modelBuilder.Entity("Interfaces.Models.Platform", b =>
+                {
+                    b.Navigation("GamePlatforms");
                 });
 #pragma warning restore 612, 618
         }

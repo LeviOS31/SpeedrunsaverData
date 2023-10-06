@@ -17,8 +17,6 @@ namespace Interfaces.DB
         public DbSet<Speedrun> Runs { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<GamePlatform> GamePlatforms { get; set; }
-
         Task<int> SaveChangesAsync();
     }
 }
