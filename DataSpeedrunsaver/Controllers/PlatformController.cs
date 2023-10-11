@@ -2,6 +2,7 @@
 using DataBase.Data;
 using Logic.Container;
 using Interfaces.RequestBody;
+using DataBase.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -10,13 +11,12 @@ namespace DataSpeedrunsaver.Controllers
     public class PlatformController : Controller
     {
         private readonly ILogger<PlatformController> _logger;
-        private readonly DBSpeedrunsaverContext _context;
         private readonly PlatformContainer _plaformContainer;
         
-        public PlatformController(ILogger<PlatformController> logger) 
+        public PlatformController(ILogger<PlatformController> logger, DBSpeedrunsaverContext dbcontext) 
         {
-            _context = new DBSpeedrunsaverContext();
-            _plaformContainer = new PlatformContainer(_context);
+            PlaformDAL plaformDAL = new PlaformDAL(dbcontext);
+            _plaformContainer = new PlatformContainer(plaformDAL);
             _logger = logger;
         }
 

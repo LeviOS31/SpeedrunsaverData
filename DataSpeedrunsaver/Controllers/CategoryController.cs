@@ -2,6 +2,7 @@
 using Logic.Container;
 using Interfaces.RequestBody;
 using Microsoft.AspNetCore.Mvc;
+using DataBase.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -9,13 +10,12 @@ namespace DataSpeedrunsaver.Controllers
     public class CategoryController : Controller
     {
         private readonly ILogger<UserController> _logger;
-        private readonly DBSpeedrunsaverContext _context;
         private readonly CategoryContainer _categoryContainer;
 
-        public CategoryController(ILogger<UserController> logger)
+        public CategoryController(ILogger<UserController> logger, DBSpeedrunsaverContext dbcontext)
         {
-            _context = new DBSpeedrunsaverContext();
-            _categoryContainer = new CategoryContainer(_context);
+            CategoryDAL categoryDAL =  new CategoryDAL(dbcontext);
+            _categoryContainer = new CategoryContainer(categoryDAL);
             _logger = logger;
         }
 

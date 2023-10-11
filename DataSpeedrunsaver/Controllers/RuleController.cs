@@ -2,6 +2,7 @@
 using DataBase.Data;
 using Logic.Container;
 using Interfaces.RequestBody;
+using DataBase.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -10,13 +11,12 @@ namespace DataSpeedrunsaver.Controllers
     public class RuleController : Controller
     {
         private readonly ILogger<RuleController> _logger;
-        private readonly DBSpeedrunsaverContext _context;
         private readonly RuleContainer _ruleContainer;
 
-        public RuleController(ILogger<RuleController> logger)
+        public RuleController(ILogger<RuleController> logger, DBSpeedrunsaverContext dbcontext)
         {
-            _context = new DBSpeedrunsaverContext();
-            _ruleContainer = new RuleContainer(_context);
+            RuleDAL ruleDAL = new RuleDAL(dbcontext);
+            _ruleContainer = new RuleContainer(ruleDAL);
             _logger = logger;
         }
 

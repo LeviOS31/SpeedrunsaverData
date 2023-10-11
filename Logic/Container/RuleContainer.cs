@@ -1,39 +1,52 @@
-﻿using Interfaces.DB;
-using Interfaces.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Interfaces.DB.DAL;
+using Interfaces.DTO;
 using Interfaces.RequestBody;
 
 namespace Logic.Container
 {
     public class RuleContainer
     {
-        private readonly IDBContext _dbContext;
+        private readonly IRuleDAL rulesDAL;
 
-        public RuleContainer(IDBContext dbContext)
+        public RuleContainer(IRuleDAL _rulesDAL)
         {
-            _dbContext = dbContext;
+            rulesDAL = _rulesDAL;
         }
 
-        public async Task<List<Rule>> GetRules()
+        public async Task<List<RuleDTO>> GetRules()
         {
-            return await _dbContext.Rules.ToListAsync();
+            return await rulesDAL.GetRules();
         }
 
-        public async Task<Rule> GetRule(int id)
+        public async Task<RuleDTO> GetRule(int id)
         {
-            return await _dbContext.Rules.FindAsync(id);
+            return await rulesDAL.GetRule(id);
         }
 
-        public async Task CreateRule(RuleBody body)
+        public async Task CreateRule(RuleBody ruleBody)
         {
-            Rule rule = new Rule
+            RuleDTO ruleDTO = new RuleDTO
             {
-                RuleDescription = body.RuleDescription,
-                CategoryId = body.CategoryId
+                RuleDescription = ruleBody.RuleDescription,
+                CategoryId = ruleBody.CategoryId
             };
+            await rulesDAL.CreateRule(ruleDTO);
+        }
 
-            await _dbContext.Rules.AddAsync(rule);
-            await _dbContext.SaveChangesAsync();
+        public async Task UpdateRule(int id, RuleBody ruleBody)
+        {
+            RuleDTO ruleDTO = new RuleDTO
+            {
+                Id = id,
+                RuleDescription = ruleBody.RuleDescription,
+                CategoryId = ruleBody.CategoryId
+            };
+            await rulesDAL.UpdateRule(ruleDTO);
+        }
+
+        public async Task DeleteRule(int id)
+        {
+            await rulesDAL.DeleteRule(id);
         }
     }
 }

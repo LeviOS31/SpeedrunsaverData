@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Interfaces.DTO;
+using System.Text.Json.Serialization;
 
 namespace Interfaces.RequestBody
 {
@@ -10,5 +11,6 @@ namespace Interfaces.RequestBody
         [JsonPropertyName("developer")] public string Developer { get; set; }
         [JsonPropertyName("publisher")] public string Publisher { get; set; }
         [JsonPropertyName("releaseDate")] public DateTime ReleaseDate { get; set; }
+        [JsonPropertyName("platforms")] public List<PlatformDTO> Platforms { get; set; }
     }
 }

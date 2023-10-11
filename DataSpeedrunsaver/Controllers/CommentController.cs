@@ -2,6 +2,7 @@
 using DataBase.Data;
 using Logic.Container;
 using Interfaces.RequestBody;
+using DataBase.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -10,13 +11,12 @@ namespace DataSpeedrunsaver.Controllers
     public class CommentController : Controller
     {
         private readonly ILogger<CommentController> _logger;
-        private readonly DBSpeedrunsaverContext _context;
         private readonly CommentContainer _commentContainer;
 
-        public CommentController(ILogger<CommentController> logger)
+        public CommentController(ILogger<CommentController> logger, DBSpeedrunsaverContext dbcontext)
         {
-            _context = new DBSpeedrunsaverContext();
-            _commentContainer = new CommentContainer(_context);
+            CommentDAL commentDAL = new CommentDAL(dbcontext);
+            _commentContainer = new CommentContainer(commentDAL);
             _logger = logger;
         }
 

@@ -1,5 +1,7 @@
 
-using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Interfaces.DB;
+using DataBase.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +21,14 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
-/*builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddDbContext<DBSpeedrunsaverContext>(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-});*/
+    options.UseSqlServer(
+        @"Server=mssqlstud.fhict.local;Database=dbi512680_speedrun;User Id=dbi512680_speedrun;Password=Admin1234;TrustServerCertificate=True;"
+);
+});
+
+//builder.Services.AddSingleton<DBSpeedrunsaverContext>();
 
 var app = builder.Build();
 

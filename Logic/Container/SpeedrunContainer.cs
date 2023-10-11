@@ -1,59 +1,73 @@
-﻿using Interfaces.DB;
-using Interfaces.Models;
+﻿using Interfaces.DB.DAL;
+using Interfaces.DTO;
 using Interfaces.RequestBody;
-using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Container
 {
     public class SpeedrunContainer
     {
-        private readonly IDBContext _dbContext;
+        private readonly ISpeedrunDAL speedrunDAL;
 
-        public SpeedrunContainer(IDBContext dbContext)
+        public SpeedrunContainer(ISpeedrunDAL _speedrunDAL)
         {
-            _dbContext = dbContext;
+            speedrunDAL = _speedrunDAL;
         }
 
-        public async Task<List<Speedrun>> GetSpeedruns()
+        public async Task<List<SpeedrunDTO>> GetSpeedruns()
         {
-            return await _dbContext.Runs.ToListAsync();
+            return await speedrunDAL.GetSpeedruns();
         }
 
-        public async Task<Speedrun> GetSpeedrun(int id)
+        public async Task<SpeedrunDTO> GetSpeedrun(int id)
         {
-            return await _dbContext.Runs
-                .Include(x => x.Category)
-                .Include(x => x.User)
-                .Include(x => x.Platform)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            return await speedrunDAL.GetSpeedrun(id);
         }
 
-        public async Task<List<Speedrun>> GetSpeedrunsByCategory(int id)
+        public async Task<List<SpeedrunDTO>> GetSpeedrunsByCategory(int id)
         {
-            return await _dbContext.Runs
-                .Include(x => x.User)
-                .Include(x => x.Platform)
-                .Where(x => x.categoryId == id)
-                .ToListAsync();
+            return await speedrunDAL.GetSpeedrunsByCategory(id);
         }
 
-        public async Task CreateSpeedrun(SpeedrunBody body) 
+        public async Task Createspeedrun(SpeedrunBody speedrunBody)
         {
-            Speedrun speedrun = new Speedrun
+            SpeedrunDTO speedrunDTO = new SpeedrunDTO
             {
-                SpeedrunName = body.SpeedrunName,
-                SpeedrunDescription = body.SpeedrunDescription,
-                categoryId = body.CategoryId,
-                platformId = body.PlatformId,
-                userId = body.UserId,
-                time = body.Time,
-                Date = body.Date,
-                VideoLink = body.VideoLink,
-                status = 0
+                SpeedrunName = speedrunBody.SpeedrunName,
+                SpeedrunDescription = speedrunBody.SpeedrunDescription,
+                categoryId = speedrunBody.CategoryId,
+                platformId = speedrunBody.PlatformId,
+                userId = speedrunBody.UserId,
+                time = speedrunBody.Time,
+                Date = speedrunBody.Date,
+                VideoLink = speedrunBody.VideoLink,
+                status = speedrunBody.Status
             };
 
-            await _dbContext.Runs.AddAsync(speedrun);
-            await _dbContext.SaveChangesAsync();
+            await speedrunDAL.CreateSpeedrun(speedrunDTO);
         }
+
+        public async Task Updatespeedrun(int id, SpeedrunBody speedrunbody)
+        {
+            SpeedrunDTO speedrunDTO = new SpeedrunDTO
+            {
+                Id = id,
+                SpeedrunName = speedrunbody.SpeedrunName,
+                SpeedrunDescription = speedrunbody.SpeedrunDescription,
+                categoryId = speedrunbody.CategoryId,
+                platformId = speedrunbody.PlatformId,
+                userId = speedrunbody.UserId,
+                time = speedrunbody.Time,
+                Date = speedrunbody.Date,
+                VideoLink = speedrunbody.VideoLink,
+                status = speedrunbody.Status
+            };
+            await speedrunDAL.UpdateSpeedrun(speedrunDTO);
+        }
+
+        public async Task Deletespeedrun(int id)
+        {
+            await speedrunDAL.DeleteSpeedrun(id);
+        }
+
     }
 }

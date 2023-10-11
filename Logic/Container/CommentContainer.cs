@@ -1,41 +1,58 @@
-﻿using Interfaces.DB;
-using Interfaces.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Interfaces.DB.DAL;
+using Interfaces.DTO;
 using Interfaces.RequestBody;
 
 namespace Logic.Container
 {
     public class CommentContainer
     {
-        private readonly IDBContext _dbContext;
+        private readonly ICommentDAL commentDAL;
 
-        public CommentContainer(IDBContext dbContext)
+        public CommentContainer(ICommentDAL commentDAL)
         {
-            _dbContext = dbContext;
+            this.commentDAL = commentDAL;
         }
 
-        public async Task<List<Comment>> GetComments()
+        public async Task<List<CommentDTO>> GetComments()
         {
-            return await _dbContext.Comments.ToListAsync();
+            return await commentDAL.GetComments();
         }
 
-        public async Task<Comment> GetComment(int id)
+        public async Task<CommentDTO> GetComment(int id)
         {
-            return await _dbContext.Comments.FindAsync(id);
+            return await commentDAL.GetComment(id);
         }
 
-        public async Task CreateComment(CommentBody body)
+        public async Task CreateComment(CommentBody commentBody)
         {
-            Comment comment = new Comment
+            CommentDTO commentDTO = new CommentDTO
             {
-                CommentText = body.CommentText,
-                UserId = body.UserId,
-                SpeedrunId = body.SpeedrunId,
-                Date = body.Date
+                CommentText = commentBody.CommentText,
+                Date = commentBody.Date,
+                UserId = commentBody.UserId,
+                SpeedrunId = commentBody.SpeedrunId
             };
 
-            await _dbContext.Comments.AddAsync(comment);
-            await _dbContext.SaveChangesAsync();
+            await commentDAL.CreateComment(commentDTO);
+        }
+
+        public async Task UpdateComment(int id, CommentBody commentBody)
+        {
+            CommentDTO commentDTO = new CommentDTO
+            {
+                Id = id,
+                CommentText = commentBody.CommentText,
+                Date = commentBody.Date,
+                UserId = commentBody.UserId,
+                SpeedrunId = commentBody.SpeedrunId
+            };
+
+            await commentDAL.UpdateComment(commentDTO);
+        }
+
+        public async Task DeleteComment(int id)
+        {
+            await commentDAL.DeleteComment(id);
         }
     }
 }

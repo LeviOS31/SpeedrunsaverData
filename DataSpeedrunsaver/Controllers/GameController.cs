@@ -1,4 +1,5 @@
-﻿using DataBase.Data;
+﻿using DataBase.DAL;
+using DataBase.Data;
 using Interfaces.RequestBody;
 using Logic.Container;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +11,12 @@ namespace DataSpeedrunsaver.Controllers
     public class GameController : Controller
     {
         private readonly ILogger<GameController> _logger;
-        private readonly DBSpeedrunsaverContext _context;
         private readonly GameContainer _gameContainer;
 
-        public GameController(ILogger<GameController> logger)
+        public GameController(ILogger<GameController> logger, DBSpeedrunsaverContext dbcontext)
         {
-            _context = new DBSpeedrunsaverContext();
-            _gameContainer = new GameContainer(_context);
+            GameDAL gameDAL = new GameDAL(dbcontext);
+            _gameContainer = new GameContainer(gameDAL);
             _logger = logger;
         }
 

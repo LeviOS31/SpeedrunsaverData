@@ -4,6 +4,7 @@ using DataBase.Data;
 using Interfaces.RequestBody;
 using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace DataBase.DAL
 {
@@ -46,7 +47,9 @@ namespace DataBase.DAL
 
         public async Task<List<CategoryDTO>> GetCategoriesByGameId(int gameId)
         {
-            List<Category> dbcategories = await dbcontext.Categories.Where(category => category.gameId == gameId).ToListAsync();
+            List<Category> dbcategories = await dbcontext.Categories
+                .Where(category => category.gameId == gameId)
+                .ToListAsync();
             List<CategoryDTO> categories = new List<CategoryDTO>();
             foreach (Category category in dbcategories)
             {
@@ -61,9 +64,35 @@ namespace DataBase.DAL
             return categories;
         }
 
-        public async Task CreateCategory(CategoryBody categoryBody)
+        public async Task CreateCategory(CategoryDTO categoryDTO)
         {
-            CategoryDTO category;
+            Category category = new Category
+            {
+                CategoryName = categoryDTO.CategoryName,
+                CategoryDescription = categoryDTO.CategoryDescription,
+                gameId = categoryDTO.gameId,
+            };
+            dbcontext.Categories.Add(category);
+            await dbcontext.SaveChangesAsync();
+        }
+
+        public async Task UpdateCategory(CategoryDTO categoryDTO)
+        {
+            var entryupdate = await dbcontext.Categories.FindAsync(categoryDTO.Id);
+
+            entryupdate.CategoryName = categoryDTO.CategoryName;
+            entryupdate.CategoryDescription = categoryDTO.CategoryDescription;
+            entryupdate.gameId = categoryDTO.gameId;
+
+            dbcontext.Categories.Update(entryupdate);
+            await dbcontext.SaveChangesAsync();
+        }
+
+        public async Task DeleteCategory(int id)
+        {
+            Category category = await dbcontext.Categories.FindAsync(id);
+            dbcontext.Categories.Remove(category);
+            await dbcontext.SaveChangesAsync();
         }
     }
 }

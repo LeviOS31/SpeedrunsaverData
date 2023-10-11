@@ -12,11 +12,9 @@ namespace DataBase.Data
         public DbSet<Speedrun> Runs { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public DBSpeedrunsaverContext(DbContextOptions<DBSpeedrunsaverContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer(
-                @"Server=mssqlstud.fhict.local;Database=dbi512680_speedrun;User Id=dbi512680_speedrun;Password=Admin1234;TrustServerCertificate=True;"
-            );
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

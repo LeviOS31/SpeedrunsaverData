@@ -1,47 +1,65 @@
 ﻿using Interfaces.DB;
-using Interfaces.Models;
+using Interfaces.DB.DAL;
+using Interfaces.DTO;
 using Interfaces.RequestBody;
-using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Container
 {
     public class GameContainer
     {
-        private readonly IDBContext _dbContext;
+        private readonly IGameDAL gameDAL;
 
-        public GameContainer(IDBContext dbContext)
+        public GameContainer(IGameDAL gameDAL)
         {
-            _dbContext = dbContext;
+            this.gameDAL = gameDAL;
         }
 
-        public async Task<List<Game>> GetGames()
+        public async Task<List<GameDTO>> GetGames()
         {
-            return await _dbContext.Games.ToListAsync();
+            return await gameDAL.GetGames();
         }
 
-        public async Task<Game> GetGame(int id)
+        public async Task<GameDTO> GetGame(int id)
         {
-            Game game = await _dbContext.Games
-                .Include(g => g.Platforms)
-                .FirstOrDefaultAsync(g => g.Id == id);
-
-            return game;
+            return await gameDAL.GetGame(id);
         }
 
-        public async Task CreateGame(GameBody body)
+        public async Task CreateGame(GameBody gamebody)
         {
-            Game game = new Game
+            GameDTO gameDTO = new GameDTO
             {
-                GameName = body.GameName,
-                GameDescription = body.GameDescription,
-                GameImage = body.GameImage,
-                Developer = body.Developer,
-                Publisher = body.Publisher,
-                ReleaseDate = body.ReleaseDate
+                GameName = gamebody.GameName,
+                GameImage = gamebody.GameImage,
+                GameDescription = gamebody.GameDescription,
+                Developer = gamebody.Developer,
+                Publisher = gamebody.Publisher,
+                ReleaseDate = gamebody.ReleaseDate,
+                Platforms = gamebody.Platforms
             };
 
-            await _dbContext.Games.AddAsync(game);
-            await _dbContext.SaveChangesAsync();
+            await gameDAL.CreateGame(gameDTO);
+        }
+
+        public async Task UpdateGame(int id, GameBody gamebody)
+        {
+            GameDTO gameDTO = new GameDTO
+            {
+                Id = id,
+                GameName = gamebody.GameName,
+                GameImage = gamebody.GameImage,
+                GameDescription = gamebody.GameDescription,
+                Developer = gamebody.Developer,
+                Publisher = gamebody.Publisher,
+                ReleaseDate = gamebody.ReleaseDate,
+                Platforms = gamebody.Platforms
+            };
+
+            await gameDAL.UpdateGame(gameDTO);
+        }
+
+        public async Task DeleteGame(int id)
+        {
+            await gameDAL.DeleteGame(id);
         }
     }
 }

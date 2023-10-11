@@ -1,5 +1,6 @@
 ﻿using Interfaces.DB;
-using Interfaces.Models;
+using Interfaces.DB.DAL;
+using Interfaces.DTO;
 using Interfaces.RequestBody;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,44 +8,58 @@ namespace Logic.Container
 {
     public class UserContainer
     {
-        private List<User> users { get; set; }
-        private readonly IDBContext _dBContext;
+        private readonly IUserDAL userDAL;
 
-        public UserContainer(IDBContext dBContext)
+        public UserContainer(IUserDAL dal)
         {
-            _dBContext = dBContext;
-            users = _dBContext.Users.ToList();
+            userDAL = dal;
         }
 
-        public async Task<List<User>> GetUsers() 
+        public async Task<List<UserDTO>> GetUsers()
         {
-            return await _dBContext.Users.ToListAsync();
+            return await userDAL.GetUsers();
         }
 
-        public async Task<User> GetUser(int id)
+        public async Task<UserDTO> GetUser(int id)
         {
-            return await _dBContext.Users.FindAsync(id);
+            return await userDAL.GetUser(id);
         }
 
-        public async Task CreateUser(UserBody body) 
+        public async Task CreateUser(UserBody userBody)
         {
-            
-            string password = BCrypt.Net.BCrypt.HashPassword(body.Password);
-            var user = new User
+            UserDTO userDTO = new UserDTO
             {
-                Username = body.Username,
-                Password = password,
-                Country = body.Country,
-                Email = body.Email,
-                Admin = body.Admin
+                Username = userBody.Username,
+                Password = BCrypt.Net.BCrypt.HashPassword(userBody.Password),
+                Country = userBody.Country,
+                Email = userBody.Email,
+                Admin = userBody.Admin
             };
-            await _dBContext.Users.AddAsync(user);
-            await _dBContext.SaveChangesAsync();
+            await userDAL.CreateUser(userDTO);
+        }
+
+        public async Task UpdateUser(int id, UserBody userBody)
+        {
+            UserDTO userDTO = new UserDTO
+            {
+                Id = id,
+                Username = userBody.Username,
+                Password = BCrypt.Net.BCrypt.HashPassword(userBody.Password),
+                Country = userBody.Country,
+                Email = userBody.Email,
+                Admin = userBody.Admin
+            };
+            await userDAL.UpdateUser(userDTO);
+        }
+
+        public async Task DeleteUser(int id)
+        {
+            await userDAL.DeleteUser(id);
         }
 
         public async Task<int> ValidateUser(UserBody body) 
         {
-            User user = await _dBContext.Users.FirstOrDefaultAsync(u => u.Username == body.Username);
+            UserDTO user = await userDAL.GetUserByName(body.Username);
             if(user != null) 
             {
                 if (BCrypt.Net.BCrypt.Verify(body.Password, user.Password))

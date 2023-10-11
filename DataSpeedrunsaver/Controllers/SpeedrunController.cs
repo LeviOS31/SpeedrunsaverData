@@ -2,6 +2,7 @@
 using Logic.Container;
 using Microsoft.AspNetCore.Mvc;
 using Interfaces.RequestBody;
+using DataBase.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -9,13 +10,12 @@ namespace DataSpeedrunsaver.Controllers
     public class SpeedrunController : Controller
     {
         private readonly ILogger<UserController> _logger;
-        private readonly DBSpeedrunsaverContext _context;
         private readonly SpeedrunContainer _speedrunContainer;
 
-        public SpeedrunController(ILogger<UserController> logger)
+        public SpeedrunController(ILogger<UserController> logger, DBSpeedrunsaverContext dbcontext)
         {
-            _context = new DBSpeedrunsaverContext();
-            _speedrunContainer = new SpeedrunContainer(_context);
+            SpeedrunDAL speedrunDAL = new SpeedrunDAL(dbcontext);
+            _speedrunContainer = new SpeedrunContainer(speedrunDAL);
             _logger = logger;
         }
 
@@ -46,7 +46,7 @@ namespace DataSpeedrunsaver.Controllers
         {
             try
             {
-                await _speedrunContainer.CreateSpeedrun(body);
+                await _speedrunContainer.Createspeedrun(body);
                 return Ok();
             }
             catch (Exception e)

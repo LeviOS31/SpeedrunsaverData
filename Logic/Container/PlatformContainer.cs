@@ -1,41 +1,57 @@
 ﻿using Interfaces.DB;
-using Interfaces.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Metrics;
+using Interfaces.DB.DAL;
+using Interfaces.DTO;
 using Interfaces.RequestBody;
 
 namespace Logic.Container
 {
     public class PlatformContainer
     {
-        private readonly IDBContext _dbContext;
+        private readonly IPlatformDAL platformDAL;
 
-        public PlatformContainer(IDBContext dbContext)
+        public PlatformContainer(IPlatformDAL platformDAL)
         {
-            _dbContext = dbContext;
+            this.platformDAL = platformDAL;
         }
 
-        public async Task<List<Platform>> GetPlatforms()
+        public async Task<List<PlatformDTO>> GetPlatforms()
         {
-            return await _dbContext.Platforms.ToListAsync();
+            return await platformDAL.GetPlatforms();
         }
 
-        public async Task<Platform> GetPlatform(int id)
+        public async Task<PlatformDTO> GetPlatform(int id)
         {
-            return await _dbContext.Platforms.FindAsync(id);
+            return await platformDAL.GetPlatform(id);
         }
 
-        public async Task CreatePlatform(PlatformBody body) 
+        public async Task CreatePlatform(PlatformBody platformBody)
         {
-            Platform platform = new Platform
+            PlatformDTO platformDTO = new PlatformDTO
             {
-                PlatformName = body.PlatformName,
-                ReleaseDate = body.ReleaseDate,
-                Manufacturer = body.Manufacturer
+                PlatformName = platformBody.PlatformName,
+                ReleaseDate = platformBody.ReleaseDate,
+                Manufacturer = platformBody.Manufacturer
             };
 
-            await _dbContext.Platforms.AddAsync(platform);
-            await _dbContext.SaveChangesAsync();
+            await platformDAL.CreatePlatform(platformDTO);
+        }
+
+        public async Task UpdatePlatform(int id, PlatformBody platformBody)
+        {
+            PlatformDTO platformDTO = new PlatformDTO
+            {
+                Id = id,
+                PlatformName = platformBody.PlatformName,
+                ReleaseDate = platformBody.ReleaseDate,
+                Manufacturer = platformBody.Manufacturer
+            };
+
+            await platformDAL.UpdatePlatform(platformDTO);
+        }
+
+        public async Task DeletePlatform(int id)
+        {
+            await platformDAL.DeletePlatform(id);
         }
     }
 }
