@@ -72,5 +72,28 @@ namespace DataSpeedrunsaver.Controllers
                 return StatusCode(500, "Something went wrong when trying to validate user: " + e.Message);
             }
         }
+
+        [HttpPost]
+        [Route("/User/Checks")]
+        public async Task<IActionResult> CheckUserInfo([FromBody] UserBody body)
+        {
+            try
+            {
+                int id = await _userContainer.CheckifCorrect(body);
+                if (id != 0)
+                {
+                    return Ok(id);
+                }
+                else
+                {
+                    throw new Exception("Invalid user");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to validate user: " + e.Message);
+            }
+        }
     }
 }

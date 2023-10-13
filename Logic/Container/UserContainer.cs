@@ -69,5 +69,18 @@ namespace Logic.Container
             }
             return 0;
         }
+
+        public async Task<int> CheckifCorrect(UserBody body)
+        {
+            UserDTO user = await userDAL.GetUser(body.Id);
+            if(user.Username == body.Username)
+            {
+                if(user.Admin == body.Admin)
+                {
+                    return body.Id;
+                }
+            }
+            return 0;
+        }
     }
 }
