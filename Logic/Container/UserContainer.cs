@@ -73,11 +73,14 @@ namespace Logic.Container
         public async Task<int> CheckifCorrect(UserBody body)
         {
             UserDTO user = await userDAL.GetUser(body.Id);
-            if(user.Username == body.Username)
+            if(user != null)
             {
-                if(user.Admin == body.Admin)
+                if(user.Username == body.Username)
                 {
-                    return body.Id;
+                    if(user.Admin == body.Admin)
+                    {
+                        return body.Id;
+                    }
                 }
             }
             return 0;

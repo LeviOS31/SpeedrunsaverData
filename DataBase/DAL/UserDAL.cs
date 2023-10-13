@@ -45,6 +45,10 @@ namespace DataBase.DAL
         {
             User userdb = await dbcontext.Users.FindAsync(id);
 
+            if (userdb == null)
+            {
+                return null;
+            }
             UserDTO user = new UserDTO
             {
                 Id = userdb.Id,
@@ -61,16 +65,20 @@ namespace DataBase.DAL
         public async Task<UserDTO> GetUserByName(string name)
         {
             User userdb = await dbcontext.Users.FirstOrDefaultAsync(u => u.Username == name);
-            UserDTO user = new UserDTO
+            if (userdb != null)
             {
-                Id = userdb.Id,
-                Username = userdb.Username,
-                Email = userdb.Email,
-                Password = userdb.Password,
-                Country = userdb.Country,
-                Admin = userdb.Admin,
-            };
-            return user;
+                UserDTO user = new UserDTO
+                {
+                    Id = userdb.Id,
+                    Username = userdb.Username,
+                    Email = userdb.Email,
+                    Password = userdb.Password,
+                    Country = userdb.Country,
+                    Admin = userdb.Admin,
+                };
+                return user;
+            }
+            return null;
         }
 
         public async Task CreateUser(UserDTO userDTO)
