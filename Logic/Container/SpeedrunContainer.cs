@@ -69,5 +69,10 @@ namespace Logic.Container
             await speedrunDAL.DeleteSpeedrun(id);
         }
 
+        public async Task<List<SpeedrunDTO>> GetLatestRuns()
+        {
+            return await speedrunDAL.GetLatestRuns();
+        }
+
     }
 }

@@ -190,5 +190,61 @@ namespace DataBase.DAL
             dbcontext.Runs.Remove(speedrun);
             await dbcontext.SaveChangesAsync();
         }
+
+        public async Task<List<SpeedrunDTO>> GetLatestRuns()
+        {
+            List<Speedrun> dbspeedruns = await dbcontext.Runs
+               .Include(s => s.Platform)
+               .Include(s => s.User)
+               .Include(s => s.Category)
+               .ThenInclude(c => c.Game)
+               .OrderBy(s => s.Date)
+               .Where(s => s.status == 1)
+               .ToListAsync();
+            List<SpeedrunDTO> speedruns = new List<SpeedrunDTO>();
+
+            foreach( Speedrun speedrun in dbspeedruns)
+            {
+                speedruns.Add(new SpeedrunDTO
+                {
+                    Id = speedrun.Id,
+                    SpeedrunName = speedrun.SpeedrunName,
+                    SpeedrunDescription = speedrun.SpeedrunDescription,
+                    categoryId = speedrun.categoryId,
+                    platformId = speedrun.platformId,
+                    userId = speedrun.userId,
+                    time = speedrun.time,
+                    Date = speedrun.Date,
+                    VideoLink = speedrun.VideoLink,
+                    status = speedrun.status,
+                    Platform = new PlatformDTO
+                    {
+                        Id = speedrun.Platform.Id,
+                        PlatformName = speedrun.Platform.PlatformName,
+                    },
+                    User = new UserDTO
+                    {
+                        Id = speedrun.User.Id,
+                        Username = speedrun.User.Username,
+                    },
+                    Category = new CategoryDTO
+                    {
+                        Id = speedrun.Category.Id,
+                        CategoryName = speedrun.Category.CategoryName,
+                        gameId = speedrun.Category.gameId,
+                        Game = new GameDTO
+                        {
+                            Id = speedrun.Category.Game.Id,
+                            GameName = speedrun.Category.Game.GameName,
+                            GameDescription = speedrun.Category.Game.GameDescription,
+                            GameImage = speedrun.Category.Game.GameImage,
+                        }
+                    },
+                });
+            }
+            
+            speedruns = speedruns.Take(5).ToList();
+            return speedruns;
+        }
     }
 }

@@ -3,6 +3,7 @@ using DataBase.Data;
 using Logic.Container;
 using Interfaces.RequestBody;
 using DataBase.DAL;
+using Interfaces.DTO;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -16,7 +17,8 @@ namespace DataSpeedrunsaver.Controllers
         public UserController(ILogger<UserController> logger, DBSpeedrunsaverContext dbcontext)
         {
             UserDAL userdal = new UserDAL(dbcontext);
-            _userContainer = new UserContainer(userdal);
+            UserTokenDAL tokendal = new UserTokenDAL(dbcontext);
+            _userContainer = new UserContainer(userdal, tokendal);
             _logger = logger;
         }
 
@@ -56,10 +58,10 @@ namespace DataSpeedrunsaver.Controllers
         {
             try 
             {
-                int id = await _userContainer.ValidateUser(body);
-                if (id != 0)
+                UserTokenDTO token = await _userContainer.ValidateUser(body);
+                if (token != null)
                 {
-                    return Ok(id);
+                    return Ok(token);
                 }
                 else 
                 {
@@ -75,12 +77,12 @@ namespace DataSpeedrunsaver.Controllers
 
         [HttpPost]
         [Route("/User/Checks")]
-        public async Task<IActionResult> CheckUserInfo([FromBody] UserBody body)
+        public async Task<IActionResult> CheckUserInfo([FromBody] TokenBody body)
         {
             try
             {
                 int id = await _userContainer.CheckifCorrect(body);
-                if (id != 0)
+                if (id > 0)
                 {
                     return Ok(id);
                 }

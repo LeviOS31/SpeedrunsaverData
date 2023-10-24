@@ -55,5 +55,20 @@ namespace DataSpeedrunsaver.Controllers
                 return StatusCode(500, "Something went wrong when trying to create speedrun: " + e.Message);
             }
         }
+
+        [HttpGet]
+        [Route("/Speedrun/LatestRuns")]
+        public async Task<IActionResult> GetLatestRuns()
+        {
+            try
+            {
+                return Ok(await _speedrunContainer.GetLatestRuns());
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to get latest runs: " + e.Message);
+            }
+        }
     }
 }

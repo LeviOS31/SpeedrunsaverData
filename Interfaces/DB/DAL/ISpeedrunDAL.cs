@@ -15,5 +15,6 @@ namespace Interfaces.DB.DAL
         public Task<List<SpeedrunDTO>> GetSpeedrunsByCategory(int id);
         public Task UpdateSpeedrun(SpeedrunDTO speedrunDTO);
         public Task DeleteSpeedrun(int id);
+        public Task<List<SpeedrunDTO>> GetLatestRuns();
     }
 }

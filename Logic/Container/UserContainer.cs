@@ -9,10 +9,12 @@ namespace Logic.Container
     public class UserContainer
     {
         private readonly IUserDAL userDAL;
+        private readonly IUserTokenDAL tokenDAL;
 
-        public UserContainer(IUserDAL dal)
+        public UserContainer(IUserDAL dal, IUserTokenDAL tokenDAL)
         {
             userDAL = dal;
+            this.tokenDAL = tokenDAL;
         }
 
         public async Task<List<UserDTO>> GetUsers()
@@ -57,33 +59,49 @@ namespace Logic.Container
             await userDAL.DeleteUser(id);
         }
 
-        public async Task<int> ValidateUser(UserBody body) 
+        public async Task<UserTokenDTO> ValidateUser(UserBody body) 
         {
             UserDTO user = await userDAL.GetUserByName(body.Username);
             if(user != null) 
             {
                 if (BCrypt.Net.BCrypt.Verify(body.Password, user.Password))
                 {
-                    return user.Id;
-                }
-            }
-            return 0;
-        }
-
-        public async Task<int> CheckifCorrect(UserBody body)
-        {
-            UserDTO user = await userDAL.GetUser(body.Id);
-            if(user != null)
-            {
-                if(user.Username == body.Username)
-                {
-                    if(user.Admin == body.Admin)
+                    UserTokenDTO token = await tokenDAL.CheckIfTokenExistsForUser(user.Id);
+                    if (token == null)
                     {
-                        return body.Id;
+                        return await tokenDAL.CreateUserToken(user.Id);
+                    }
+                    else
+                    {
+                        return token;
                     }
                 }
             }
-            return 0;
+            return null;
+        }
+
+        public async Task<int> CheckifCorrect(TokenBody body)
+        {
+            UserTokenDTO token = await tokenDAL.CheckIfTokenExists(body.Token);
+            if (token != null)
+            {  
+                if (body.userID == token.userId)
+                {
+                    UserDTO user = await userDAL.GetUser(token.userId);
+                    if (body.AccesForAdmin)
+                    {
+                        if (user.Admin)
+                        {
+                            return user.Id;
+                        }
+                    }
+                    else
+                    {
+                        return user.Id;
+                    }
+                }
+            }
+            return -1;
         }
     }
 }

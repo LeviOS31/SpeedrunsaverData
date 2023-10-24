@@ -12,6 +12,7 @@ namespace DataBase.Data
         public DbSet<Speedrun> Runs { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserTokens> UserTokens { get; set; }
 
         public DBSpeedrunsaverContext(DbContextOptions<DBSpeedrunsaverContext> options) : base(options)
         {
