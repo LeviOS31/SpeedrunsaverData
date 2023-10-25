@@ -26,14 +26,23 @@ namespace DataSpeedrunsaver.Controllers
         [Route("/User/All")]
         public async Task<IActionResult> GetUsers()
         {
-            return Ok(await _userContainer.GetUsers());
+            List<UserDTO> users = await _userContainer.GetUsers();
+            foreach(UserDTO user in users)
+            {
+                user.Password = "";
+                user.Email = "";
+            }
+            return Ok(users);
         }
 
         [HttpGet]
         [Route("/User/Specific")]
         public async Task<IActionResult> GetUser(int id)
         {
-            return Ok(await _userContainer.GetUser(id));
+            UserDTO user = await _userContainer.GetUser(id);
+            user.Password = "";
+            return Ok(user);
+            
         }
 
         [HttpPost]
