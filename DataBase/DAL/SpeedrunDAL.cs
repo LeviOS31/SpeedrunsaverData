@@ -57,43 +57,64 @@ namespace DataBase.DAL
                 .Include(s => s.Platform)
                 .Include(s => s.Category)
                 .ThenInclude(c => c.Game)
+                .ThenInclude(g => g.Platforms)
                 .FirstOrDefaultAsync(s => s.Id == id);
-            SpeedrunDTO speedrunDTO = new SpeedrunDTO
+            if( speedrun != null)
             {
-                SpeedrunName = speedrun.SpeedrunName,
-                SpeedrunDescription = speedrun.SpeedrunDescription,
-                categoryId = speedrun.categoryId,
-                platformId = speedrun.platformId,
-                userId = speedrun.userId,
-                time = speedrun.time,
-                Date = speedrun.Date,
-                VideoLink = speedrun.VideoLink,
-                status = speedrun.status,
-                Category = new CategoryDTO
+                List<PlatformDTO> platforms = new List<PlatformDTO>();
+
+                foreach (Platform platform in speedrun.Category.Game.Platforms)
                 {
-                    Id = speedrun.Category.Id,
-                    CategoryName = speedrun.Category.CategoryName,
-                    gameId = speedrun.Category.gameId,
-                    Game = new GameDTO
+                    platforms.Add(new PlatformDTO
                     {
-                        Id = speedrun.Category.Game.Id,
-                        GameName = speedrun.Category.Game.GameName,
-                        GameDescription = speedrun.Category.Game.GameDescription,
-                        GameImage = speedrun.Category.Game.GameImage,
-                    }
-                },
-                Platform = new PlatformDTO
-                {
-                    Id = speedrun.Platform.Id,
-                    PlatformName = speedrun.Platform.PlatformName,
-                },
-                User = new UserDTO
-                {
-                    Id = speedrun.User.Id,
-                    Username = speedrun.User.Username,
+                        Id = platform.Id,
+                        PlatformName = platform.PlatformName,
+                    });
                 }
-            };
-            return speedrunDTO;
+
+                SpeedrunDTO speedrunDTO = new SpeedrunDTO
+                {
+                    SpeedrunName = speedrun.SpeedrunName,
+                    SpeedrunDescription = speedrun.SpeedrunDescription,
+                    categoryId = speedrun.categoryId,
+                    platformId = speedrun.platformId,
+                    userId = speedrun.userId,
+                    time = speedrun.time,
+                    Date = speedrun.Date,
+                    VideoLink = speedrun.VideoLink,
+                    status = speedrun.status,
+                    Category = new CategoryDTO
+                    {
+                        Id = speedrun.Category.Id,
+                        CategoryName = speedrun.Category.CategoryName,
+                        gameId = speedrun.Category.gameId,
+                        Game = new GameDTO
+                        {
+                            Id = speedrun.Category.Game.Id,
+                            GameName = speedrun.Category.Game.GameName,
+                            GameDescription = speedrun.Category.Game.GameDescription,
+                            Developer = speedrun.Category.Game.Developer,
+                            Publisher = speedrun.Category.Game.Publisher,
+                            ReleaseDate = speedrun.Category.Game.ReleaseDate,
+                            Platforms = platforms,
+                            GameImage = speedrun.Category.Game.GameImage,
+                        }
+                    },
+                    Platform = new PlatformDTO
+                    {
+                        Id = speedrun.Platform.Id,
+                        PlatformName = speedrun.Platform.PlatformName,
+                        Manufacturer = speedrun.Platform.Manufacturer,
+                    },
+                    User = new UserDTO
+                    {
+                        Id = speedrun.User.Id,
+                        Username = speedrun.User.Username,
+                    }
+                };
+                return speedrunDTO;
+            }
+            return null;
         }
 
         public async Task<List<SpeedrunDTO>> GetSpeedrunsByCategory(int id)
@@ -110,6 +131,7 @@ namespace DataBase.DAL
             {
                 speedrunsDTO.Add(new SpeedrunDTO
                 {
+                    Id = speedrun.Id,
                     SpeedrunName = speedrun.SpeedrunName,
                     SpeedrunDescription = speedrun.SpeedrunDescription,
                     categoryId = speedrun.categoryId,
