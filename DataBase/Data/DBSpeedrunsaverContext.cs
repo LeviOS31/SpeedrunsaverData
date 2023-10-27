@@ -27,7 +27,31 @@ namespace DataBase.Data
 
         public async Task<int> SaveChangesAsync()
         {
+            // Calculate ranks only if a Speedrun entity has been added or its CompletionTime has changed
+            await CalculateRanks();
             return await base.SaveChangesAsync();
+        }
+
+        private async Task CalculateRanks()
+        {
+            var entries = ChangeTracker.Entries<Speedrun>();
+            var addedOrModifiedSpeedruns = entries.Where(e =>
+                e.State == EntityState.Added || e.State == EntityState.Modified
+            ).Select(e => e.Entity);
+
+            if (addedOrModifiedSpeedruns.Any())
+            {
+                var categories = await Categories.ToListAsync();
+                foreach(Category category in categories)
+                {
+                    var speedruns = await Runs.OrderBy(s => s.time).Where(s => s.categoryId == category.Id).ToListAsync();
+                    int rank = 1;
+                    foreach (var speedrun in speedruns)
+                    {
+                        speedrun.rank = rank++;
+                    }
+                }
+            }
         }
     }
 }

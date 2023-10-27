@@ -19,6 +19,7 @@ namespace DataBase.DAL
             List<Speedrun> dbspeedruns = await dbcontext.Runs
                 .Include(s => s.Platform)
                 .Include(s => s.User)
+                .OrderBy(s => s.rank)
                 .ToListAsync();
             List<SpeedrunDTO> speedruns = new List<SpeedrunDTO>();
 
@@ -26,6 +27,8 @@ namespace DataBase.DAL
             {
                 speedruns.Add(new SpeedrunDTO
                 {
+                    Id = speedrun.Id,
+                    rank = speedrun.rank,
                     SpeedrunName = speedrun.SpeedrunName,
                     SpeedrunDescription = speedrun.SpeedrunDescription,
                     categoryId = speedrun.categoryId,
@@ -74,6 +77,8 @@ namespace DataBase.DAL
 
                 SpeedrunDTO speedrunDTO = new SpeedrunDTO
                 {
+                    Id = speedrun.Id,
+                    rank = speedrun.rank,
                     SpeedrunName = speedrun.SpeedrunName,
                     SpeedrunDescription = speedrun.SpeedrunDescription,
                     categoryId = speedrun.categoryId,
@@ -124,6 +129,7 @@ namespace DataBase.DAL
                 .ThenInclude(c => c.Game)
                 .Include(r => r.Platform)
                 .Include(r => r.User)
+                .OrderBy(s => s.rank)
                 .Where(x => x.categoryId == id).ToListAsync();
             List<SpeedrunDTO> speedrunsDTO = new List<SpeedrunDTO>();
 
@@ -132,6 +138,7 @@ namespace DataBase.DAL
                 speedrunsDTO.Add(new SpeedrunDTO
                 {
                     Id = speedrun.Id,
+                    rank = speedrun.rank,
                     SpeedrunName = speedrun.SpeedrunName,
                     SpeedrunDescription = speedrun.SpeedrunDescription,
                     categoryId = speedrun.categoryId,
@@ -172,8 +179,10 @@ namespace DataBase.DAL
 
         public async Task CreateSpeedrun(SpeedrunDTO speedrunDTO)
         {
+            int rank = dbcontext.Runs.Count(s => s.time < speedrunDTO.time) + 1;
             Speedrun speedrun = new Speedrun
             {
+                rank = rank,
                 SpeedrunName = speedrunDTO.SpeedrunName,
                 SpeedrunDescription = speedrunDTO.SpeedrunDescription,
                 categoryId = speedrunDTO.categoryId,
@@ -230,6 +239,7 @@ namespace DataBase.DAL
                 speedruns.Add(new SpeedrunDTO
                 {
                     Id = speedrun.Id,
+                    rank = speedrun.rank,
                     SpeedrunName = speedrun.SpeedrunName,
                     SpeedrunDescription = speedrun.SpeedrunDescription,
                     categoryId = speedrun.categoryId,

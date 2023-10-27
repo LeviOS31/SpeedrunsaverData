@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Interfaces.DTO
 {
     public class SpeedrunDTO
     {
         public int Id { get; set; }
+        public int rank { get; set; }
         public string SpeedrunName { get; set; }
         public string SpeedrunDescription { get; set; }
         public int categoryId { get; set; }

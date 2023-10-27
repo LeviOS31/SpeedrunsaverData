@@ -5,6 +5,7 @@ namespace DataBase.Models
     public class Speedrun
     {
         public int Id { get; set; }
+        public int rank { get; set; }
         public string SpeedrunName { get; set; }
         public string SpeedrunDescription { get; set; }
         public int categoryId { get; set; }
