@@ -20,28 +20,28 @@ namespace DataSpeedrunsaver.Controllers
         }
 
         [HttpGet]
-        [Route("/Category/All")]
+        [Route("/Categories")]
         public async Task<IActionResult> GetCategories() 
         {
             return Ok(await _categoryContainer.GetCategories());
         }
 
         [HttpGet]
-        [Route("/Category/Specific")]
+        [Route("/Categories/{id}")]
         public async Task<IActionResult> GetCategory(int id)
         {
             return Ok(await _categoryContainer.GetCategory(id));
         }
 
         [HttpGet]
-        [Route("/Category/Game")]
+        [Route("/Categories/game/{gameid}")]
         public async Task<IActionResult> GetCategoriesByGameId(int gameId)
         {
             return Ok(await _categoryContainer.GetCategoriesByGameId(gameId));
         }
 
         [HttpPost]
-        [Route("/Category/Create")]
+        [Route("/Categories")]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryBody body) 
         {
             try 
@@ -53,6 +53,38 @@ namespace DataSpeedrunsaver.Controllers
             {
                 Console.WriteLine(e);
                 return StatusCode(500, "Something went wrong when trying to create category: " + e.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("/Categories/{id}")]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryBody body)
+        {
+            try
+            {
+                await _categoryContainer.UpdateCategory(id, body);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to update category: " + e.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("/Categories/{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            try
+            {
+                await _categoryContainer.DeleteCategory(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to delete category: " + e.Message);
             }
         }
     }

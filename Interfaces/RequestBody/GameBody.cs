@@ -12,5 +12,8 @@ namespace Interfaces.RequestBody
         [JsonPropertyName("publisher")] public string Publisher { get; set; }
         [JsonPropertyName("releaseDate")] public DateTime ReleaseDate { get; set; }
         [JsonPropertyName("platforms")] public List<PlatformDTO> Platforms { get; set; }
+
+        [JsonPropertyName("token")] public string? Token { get; set; }
+        [JsonPropertyName("userid")] public int? userID { get; set; }
     }
 }
