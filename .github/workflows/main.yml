@@ -26,6 +26,6 @@ jobs:
 
     - name: Run Postman API tests
       run: |
-       dotnet build
+       dotnet run
        sleep 20
        newman run DataSpeedrunsaver/endpoint_tests/API_TEST.json
