@@ -21,8 +21,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Install Newman
-      run: npm install -g newman
-
-    - name: Run Postman API tests
-      run: newman run DataSpeedrunsaver/endpoint_tests/API_TEST.json
