@@ -12,6 +12,6 @@ namespace Interfaces.DTO
         public string PlatformName { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Manufacturer { get; set; }
-        public List<GameDTO> Games { get; set; }
+        public List<GameDTO>? Games { get; set; }
     }
 }

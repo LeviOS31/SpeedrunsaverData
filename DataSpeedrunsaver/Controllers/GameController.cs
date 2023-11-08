@@ -2,6 +2,7 @@
 using DataBase.Data;
 using Interfaces.RequestBody;
 using Logic.Container;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DataSpeedrunsaver.Controllers
@@ -21,21 +22,21 @@ namespace DataSpeedrunsaver.Controllers
         }
 
         [HttpGet]
-        [Route("/Game/All")]
+        [Route("/Games")]
         public async Task<IActionResult> GetGames() 
         {
             return Ok(await _gameContainer.GetGames());
         }
 
         [HttpGet]
-        [Route("/Game/Specific")]
+        [Route("/Games/{id}")]
         public async Task<IActionResult> GetGame(int id) 
         {
             return Ok(await _gameContainer.GetGame(id));
         }
 
         [HttpPost]
-        [Route("/Game/Create")]
+        [Route("/Games")]
         public async Task<IActionResult> CreateGame([FromBody] GameBody body) 
         {
             try 
@@ -48,6 +49,20 @@ namespace DataSpeedrunsaver.Controllers
                 Console.WriteLine(e);
                 return StatusCode(500, "Something went wrong when trying to create game: " + e.Message);
             }
+        }
+
+        [HttpPut]
+        [Route("/Games")]
+        public async Task<IActionResult> UpdateGame([FromBody] GameBody body)
+        {
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("/Games/{id}")]
+        public async Task<IActionResult> DeleteGame(int id)
+        {
+            return Ok();
         }
     }
 }
