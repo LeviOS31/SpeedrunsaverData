@@ -25,4 +25,7 @@ jobs:
       run: npm install -g newman
 
     - name: Run Postman API tests
-      run: newman run DataSpeedrunsaver/endpoint_tests/API_TEST.json
+      run: |
+       dotnet build
+       sleep 20
+       newman run DataSpeedrunsaver/endpoint_tests/API_TEST.json
