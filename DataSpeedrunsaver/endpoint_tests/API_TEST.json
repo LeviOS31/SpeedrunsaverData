@@ -7,6 +7,38 @@
 	},
 	"item": [
 		{
+			"name": "Get Games",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\" , function(){\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5099/Games",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5099",
+					"path": [
+						"Games"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GetGame1",
 			"event": [
 				{
@@ -31,7 +63,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5099/Games/1\n",
+					"raw": "http://localhost:5099/Games/id/1\n",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -39,6 +71,7 @@
 					"port": "5099",
 					"path": [
 						"Games",
+						"id",
 						"1\n"
 					]
 				}
@@ -91,12 +124,25 @@
 			"response": []
 		},
 		{
-			"name": "Delete Game",
+			"name": "Get game by name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Capture created object\", function () {\r",
+							"    pm.environment.set(\"createdGameId\", pm.response.json().id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "DELETE",
+				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5099/Games/1\n",
+					"raw": "http://localhost:5099/Games/name/string",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -104,7 +150,8 @@
 					"port": "5099",
 					"path": [
 						"Games",
-						"1\n"
+						"name",
+						"string"
 					]
 				}
 			},
@@ -112,12 +159,25 @@
 		},
 		{
 			"name": "Update Game",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\" , function(){\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"gameName\": \"string\",\r\n    \"gameImage\": \"string\",\r\n    \"gameDescription\": \"string\",\r\n    \"developer\": \"string\",\r\n    \"publisher\": \"string\",\r\n    \"releaseDate\": \"2023-11-07T13:21:33.556Z\",\r\n    \"platforms\": [\r\n        {\r\n            \"id\": 0,\r\n            \"platformName\": \"string\",\r\n            \"releaseDate\": \"2023-11-07T13:21:33.556Z\",\r\n            \"manufacturer\": \"string\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"gameName\": \"TestUpdate\",\r\n    \"gameImage\": \"TestUpdate.png\",\r\n    \"gameDescription\": \"For testing the update endpoint\",\r\n    \"developer\": \"me\",\r\n    \"publisher\": \"myself and i\",\r\n    \"releaseDate\": \"2011-11-18T12:06:26.421\",\r\n    \"platforms\": [\r\n        {\r\n            \"id\": 1,\r\n            \"platformName\": \"PC\",\r\n            \"releaseDate\": \"1900-01-01T12:09:48.817\",\r\n            \"manufacturer\": \"N/A\",\r\n            \"games\": null\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -125,14 +185,48 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5099/Games\n",
+					"raw": "http://localhost:5099/Games/{{createdGameId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5099",
 					"path": [
-						"Games\n"
+						"Games",
+						"{{createdGameId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Game",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\" , function(){\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5099/Games/{{createdGameId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5099",
+					"path": [
+						"Games",
+						"{{createdGameId}}"
 					]
 				}
 			},

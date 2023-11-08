@@ -11,6 +11,7 @@ namespace Interfaces.DB.DAL
     {
         public Task<List<GameDTO>> GetGames();
         public Task<GameDTO> GetGame(int id);
+        public Task<GameDTO> GetGameByName(string name);
         public Task CreateGame(GameDTO gameBody);
         public Task UpdateGame(GameDTO gameBody);
         public Task DeleteGame(int id);

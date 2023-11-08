@@ -24,6 +24,11 @@ namespace Logic.Container
             return await gameDAL.GetGame(id);
         }
 
+        public async Task<GameDTO> GetGameByName(string name)
+        {
+            return await gameDAL.GetGameByName(name);
+        }
+
         public async Task CreateGame(GameBody gamebody)
         {
             GameDTO gameDTO = new GameDTO

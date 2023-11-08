@@ -29,10 +29,17 @@ namespace DataSpeedrunsaver.Controllers
         }
 
         [HttpGet]
-        [Route("/Games/{id}")]
+        [Route("/Games/id/{id}")]
         public async Task<IActionResult> GetGame(int id) 
         {
             return Ok(await _gameContainer.GetGame(id));
+        }
+
+        [HttpGet]
+        [Route("/Games/name/{name}")]
+        public async Task<IActionResult> GetGameByName(string name)
+        {
+            return Ok(await _gameContainer.GetGameByName(name));
         }
 
         [HttpPost]
@@ -52,17 +59,35 @@ namespace DataSpeedrunsaver.Controllers
         }
 
         [HttpPut]
-        [Route("/Games")]
-        public async Task<IActionResult> UpdateGame([FromBody] GameBody body)
+        [Route("/Games/{id}")]
+        public async Task<IActionResult> UpdateGame(int id, [FromBody] GameBody body)
         {
-            return Ok();
+            try
+            {
+                await _gameContainer.UpdateGame(id, body);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to update game: " + e.Message);
+            }
         }
 
         [HttpDelete]
         [Route("/Games/{id}")]
         public async Task<IActionResult> DeleteGame(int id)
         {
-            return Ok();
+            try
+            {
+                await _gameContainer.DeleteGame(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to delete game: " + e.Message);
+            }
         }
     }
 }
