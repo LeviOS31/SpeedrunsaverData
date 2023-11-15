@@ -21,6 +21,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: AXI-StorageAPI/Dockerfile
+        file: DataSpeedrunsaver/Dockerfile
         push: true
         tags: levios3114/speedrunsaverdata:latest
