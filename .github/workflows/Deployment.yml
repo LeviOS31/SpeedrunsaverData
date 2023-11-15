@@ -23,4 +23,4 @@ jobs:
         context: .
         file: AXI-StorageAPI/Dockerfile
         push: true
-        tags: levios3114/SpeedrunsaverData:latest
+        tags: levios3114/speedrunsaverdata:latest
