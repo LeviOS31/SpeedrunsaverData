@@ -41,7 +41,8 @@ jobs:
         name: code-coverage-report
         path: coverage/
 
-    - name: Fail if coverage is under 70%
+    - name: Extract code coverage
       run: |
-        coverageResult=$(grep -Po '<div class="large cardpercentagebar cardpercentagebar8">\K[0-9.]+' coverage/index.htm)
-        echo "Code coverage is $coverageResult%"
+        $content = Get-Content -Raw -Path coverage/index.htm
+        $coverageResult = [regex]::Match($content, '(?<=<div class="large cardpercentagebar cardpercentagebar3">)[0-9.]+').Value
+        Write-Output "Code coverage is $coverageResult%"
