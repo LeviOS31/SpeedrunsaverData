@@ -43,6 +43,5 @@ jobs:
 
     - name: Extract code coverage
       run: |
-        $content = Get-Content -Raw -Path coverage/index.htm
-        $coverageResult = [regex]::Match($content, '(?<=<div class="large cardpercentagebar cardpercentagebar3">)[0-9.]+').Value
-        Write-Output "Code coverage is $coverageResult%"
+        coverageResult=$(grep -Po '<div class="large cardpercentagebar cardpercentagebar3">\K[0-9.]+' coverage/index.htm)
+        echo "Code coverage is $coverageResult%"
