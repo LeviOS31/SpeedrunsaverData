@@ -27,6 +27,6 @@ jobs:
       uses: b3b00/coverlet-action@1.2.5
       with:
         testProject: 'Test/Test.csproj'
-        output: 'Coveragefile'
+        output: 'coveragefile.xml'
         outputFormat: 'opencover'
         threshold: 80
