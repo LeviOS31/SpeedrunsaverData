@@ -24,6 +24,7 @@ namespace Test.Mock
 
         public async Task CreateRule(RuleDTO ruleDTO)
         {
+            ruleDTO.Id = rules.Count + 1;
             rules.Add(ruleDTO);
         }
 

@@ -14,7 +14,7 @@ namespace Test.Mock
             },
             new UserTokenDTO()
             {
-                token = "dsdsf323243",
+                token = "bbb123213453",
                 userId = 2,
             }
         };

@@ -24,6 +24,7 @@ namespace Test.Mock
 
         public async Task CreatePlatform(PlatformDTO platformDTO)
         {
+            platformDTO.Id = platforms.Count + 1;
             platforms.Add(platformDTO);
         }
 

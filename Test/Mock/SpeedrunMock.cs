@@ -16,7 +16,8 @@ namespace Test.Mock
                 categoryId = 1,
                 platformId = 1,
                 userId = 1,
-                time = new DateTime(0,0,0,1,25,20,573),
+                time = new DateTime(1900,1,1,1,25,20,573),
+                Date = DateTime.Now,
                 VideoLink = "https://www.youtube.com/watch?v=5qap5aO4i9A",
                 status = 1,
             },
@@ -29,7 +30,8 @@ namespace Test.Mock
                 categoryId = 1,
                 platformId = 1,
                 userId = 1,
-                time = new DateTime(0,0,0,1,25,20,573),
+                time = new DateTime(1900,1,1,1,35,20,573),
+                Date = DateTime.Now,
                 VideoLink = "https://www.youtube.com/watch?v=5qap5aO4i9A",
                 status = 1,
             }
@@ -37,6 +39,7 @@ namespace Test.Mock
 
         public async Task CreateSpeedrun(SpeedrunDTO speedrun)
         {
+            speedrun.Id = speedruns.Count + 1;
             speedruns.Add(speedrun);
         }
 

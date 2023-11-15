@@ -36,6 +36,7 @@ namespace Test.Mock
 
         public async Task CreateComment(CommentDTO commentDTO)
         {
+            commentDTO.Id = comments.Count + 1;
             comments.Add(commentDTO);
         }
 

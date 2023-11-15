@@ -84,8 +84,59 @@ namespace Test
                 Email = "Email1",
                 Admin = false
             };
+
             UserTokenDTO user = userContainer.ValidateUser(userBody).Result;
+
             Assert.AreEqual(1, user.userId);
+        }
+
+        [TestMethod]
+        public void TestValidateUser2()
+        {
+            UserBody userBody = new UserBody
+            {
+                Username = "User3",
+                Password = "Password3",
+                Email = "Email3",
+                Admin = false
+            };
+            userContainer.CreateUser(userBody).Wait();
+
+            UserTokenDTO user = userContainer.ValidateUser(userBody).Result;
+
+            Assert.AreEqual(3, user.userId);
+        }
+
+        [TestMethod]
+        public void TestValidateUserWrong()
+        {
+            UserBody userBody = new UserBody
+            {
+                Username = "User1",
+                Password = "Password2",
+                Email = "Email1",
+                Admin = false
+            };
+
+            UserTokenDTO user = userContainer.ValidateUser(userBody).Result;
+
+            Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public void TestValidateUserWrong2()
+        {
+            UserBody userBody = new UserBody
+            {
+                Username = "User4",
+                Password = "Password4",
+                Email = "Email4",
+                Admin = false
+            };
+
+            UserTokenDTO user = userContainer.ValidateUser(userBody).Result;
+
+            Assert.IsNull(user);
         }
 
         [TestMethod]
@@ -102,12 +153,53 @@ namespace Test
         }
 
         [TestMethod]
+        public void TestCheckUseradmin()
+        {
+            TokenBody token = new TokenBody
+            {
+                userID = 1,
+                AccesForAdmin = true,
+                Token = "aaa123213453"
+            };
+
+            int user = userContainer.CheckifCorrect(token).Result;
+            Assert.AreEqual(1, user);
+        }
+
+        [TestMethod]
         public void TestCheckUserWrong()
         {
             TokenBody token = new TokenBody
             {
                 userID = 1,
                 Token = "bbbbbbbbb"
+            };
+
+            int user = userContainer.CheckifCorrect(token).Result;
+            Assert.AreNotEqual(1, user);
+        }
+
+        [TestMethod]
+        public void TestCheckUserWrong2()
+        {
+            TokenBody token = new TokenBody
+            {
+                userID = 2,
+                Token = "aaa123213453"
+            };
+
+            int user = userContainer.CheckifCorrect(token).Result;
+            Assert.AreNotEqual(1, user);
+        }
+
+        [TestMethod]
+        public void TestCheckUserWrongadmin()
+        {
+            TokenBody token = new TokenBody
+            {
+                userID = 2,
+                AccesForAdmin=true,
+                Token = "bbb123213453"
             };
 
             int user = userContainer.CheckifCorrect(token).Result;
