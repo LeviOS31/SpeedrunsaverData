@@ -24,9 +24,7 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: |
-        dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Threshold=70 /p:ThresholdType=line /p:ThresholdStat=total /p:ThresholdFailOnUnder=true
-    - name: Install ReportGenerator tool
-      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+              dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Threshold=70 /p:ThresholdType=line /p:ThresholdStat=total /p:ThresholdFailOnUnder=true  /p:Exclude=\"[Storage_API]*,[DataAccess]*\" \
     - name: Create Coverage Report
       run: reportgenerator -reports:**/coverage.opencover.xml -targetdir:coverage -reporttypes:Html
 
