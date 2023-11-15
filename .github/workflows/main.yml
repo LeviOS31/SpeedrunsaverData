@@ -3,7 +3,10 @@
 
 name: .NET
 on:
-  push
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
 jobs:
   build:
 
@@ -20,4 +23,25 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: |
+        dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Threshold=70 /p:ThresholdType=line /p:ThresholdStat=total /p:ThresholdFailOnUnder=true
+    - name: Install ReportGenerator tool
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+    - name: Create Coverage Report
+      run: reportgenerator -reports:**/coverage.opencover.xml -targetdir:coverage -reporttypes:Html
+
+    - name: Upload coverage to artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: code-coverage-report
+        path: coverage/
+
+    - name: Fail if coverage is under 70%
+      run: |
+        fail=false
+        coverageResult=$(grep -Po 'Linecoverage: \K[0-9.]+' coverage/index.htm)
+        echo "Code coverage is $coverageResult%"
+        if (( $(echo "$coverageResult < 70" |bc -l) )); then
+          echo "Code coverage is less than 70%"
+          exit 1
+        fi
