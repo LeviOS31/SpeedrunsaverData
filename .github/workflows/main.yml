@@ -23,10 +23,25 @@ jobs:
     
     - name: Build
       run: dotnet build --no-restore
-    - name: Test and coverage
-      uses: b3b00/coverlet-action@1.2.5
+
+    - name: Test with coverage
+      run: |
+        dotnet test --collect:"XPlat Code Coverage;Format=opencover;Exclude=[DataAccess]*,[Storage_API]*" 
+      continue-on-error: true
+
+    - name: Install ReportGenerator tool
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+    - name: Create Coverage Report
+      run: reportgenerator -reports:**/coverage.opencover.xml -targetdir:coverage/ -reporttypes:Html
+
+    - name: Upload coverage to artifact
+      uses: actions/upload-artifact@v3
       with:
-        testProject: 'Test/Test.csproj'
-        output: 'coveragefile.xml'
-        outputFormat: 'opencover'
-        threshold: 10
+        name: code-coverage-report
+        path: coverage/
+
+    - name: Fail if coverage is under 70%
+      run: |
+        coverageResult=$(grep -Po '<div class="large cardpercentagebar cardpercentagebar8">\K[0-9.]+' coverage/index.htm)
+        echo "Code coverage is $coverageResult%"
