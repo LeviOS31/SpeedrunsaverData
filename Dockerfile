@@ -6,7 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 # Keep the original solution file name but update the project path and name
-COPY ["DataSpeedrunsaver.csproj", "Speedrunsaver/"]
+COPY ["DataSpeedrunsaver/DataSpeedrunsaver.csproj", "Speedrunsaver/"]
 RUN dotnet restore "Speedrunsaver/DataSpeedrunsaver.csproj"
 COPY . .
 WORKDIR "/src/Speedrunsaver"
