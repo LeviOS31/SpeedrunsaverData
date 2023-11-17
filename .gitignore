@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.config
+/coverage
+/Test/.config
+/tools
+/Test/tools/.store/dotnet-reportgenerator-globaltool/5.2.0
+*.exe
