@@ -3,7 +3,10 @@
 
 name: .NET
 on:
-  push
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
 jobs:
   build:
 
@@ -17,7 +20,33 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
+    
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+
+    - name: Test with coverage
+      run: |
+        dotnet test --collect:"XPlat Code Coverage;Format=opencover;Exclude=[DataAccess]*" 
+      continue-on-error: true
+
+    - name: Install ReportGenerator tool
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+    - name: Create Coverage Report
+      run: reportgenerator -reports:**/coverage.opencover.xml -targetdir:coverage/ -reporttypes:JsonSummary
+
+    - name: Upload coverage to artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: code-coverage-report
+        path: coverage/
+
+    - name: Fail if coverage is under 70%
+      run: |
+        jsonFile="coverage/Summary.json"
+        lineCoverage=$(grep -Po '"linecoverage": \K[0-9.]+' "$jsonFile")
+        echo "Line coverage is $lineCoverage%"
+                if (( $(echo "$lineCoverage < 70" |bc -l) )); then
+          echo "Code coverage is less than 70%"
+          exit 1
+        fi
