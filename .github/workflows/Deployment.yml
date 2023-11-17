@@ -21,6 +21,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: DataSpeedrunsaver/Dockerfile
+        file: Dockerfile
         push: true
         tags: levios3114/speedrunsaverdata:latest
