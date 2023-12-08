@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DataBase.Data;
 using Logic.Container;
 using Interfaces.RequestBody;
 using DataBase.DAL;
+using Interfaces.DB;
+using Interfaces.DB.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -13,9 +14,9 @@ namespace DataSpeedrunsaver.Controllers
         private readonly ILogger<RuleController> _logger;
         private readonly RuleContainer _ruleContainer;
 
-        public RuleController(ILogger<RuleController> logger, DBSpeedrunsaverContext dbcontext)
+        public RuleController(ILogger<RuleController> logger, IDalFactory dalFactory)
         {
-            RuleDAL ruleDAL = new RuleDAL(dbcontext);
+            IRuleDAL ruleDAL = dalFactory.GetRuleDAL();
             _ruleContainer = new RuleContainer(ruleDAL);
             _logger = logger;
         }

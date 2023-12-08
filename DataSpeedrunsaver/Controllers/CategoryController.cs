@@ -3,6 +3,8 @@ using Logic.Container;
 using Interfaces.RequestBody;
 using Microsoft.AspNetCore.Mvc;
 using DataBase.DAL;
+using Interfaces.DB.DAL;
+using Interfaces.DB;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -12,9 +14,9 @@ namespace DataSpeedrunsaver.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly CategoryContainer _categoryContainer;
 
-        public CategoryController(ILogger<UserController> logger, DBSpeedrunsaverContext dbcontext)
+        public CategoryController(ILogger<UserController> logger, IDalFactory dalFactory)
         {
-            CategoryDAL categoryDAL =  new CategoryDAL(dbcontext);
+            ICategoryDAL categoryDAL =  dalFactory.GetCategoryDAL();
             _categoryContainer = new CategoryContainer(categoryDAL);
             _logger = logger;
         }

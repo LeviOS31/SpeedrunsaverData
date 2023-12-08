@@ -3,7 +3,8 @@ using DataBase.Data;
 using Interfaces.RequestBody;
 using Logic.Container;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
+using Interfaces.DB.DAL;
+using Interfaces.DB;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -15,13 +16,13 @@ namespace DataSpeedrunsaver.Controllers
         private readonly GameContainer _gameContainer;
         private readonly UserContainer _userContainer;
 
-        public GameController(ILogger<GameController> logger, DBSpeedrunsaverContext dbcontext)
+        public GameController(ILogger<GameController> logger, IDalFactory dalFactory)
         {
-            GameDAL gameDAL = new GameDAL(dbcontext);
+            IGameDAL gameDAL = dalFactory.GetGameDAL();
             _gameContainer = new GameContainer(gameDAL);
 
-            UserDAL userdal = new UserDAL(dbcontext);
-            UserTokenDAL tokendal = new UserTokenDAL(dbcontext);
+            IUserDAL userdal = dalFactory.GetUserDAL();
+            IUserTokenDAL tokendal = dalFactory.GetUserTokenDAL();
             _userContainer = new UserContainer(userdal, tokendal);
 
             _logger = logger;

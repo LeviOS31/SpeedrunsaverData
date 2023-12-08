@@ -1,8 +1,9 @@
-﻿using DataBase.Data;
-using Logic.Container;
+﻿using Logic.Container;
 using Microsoft.AspNetCore.Mvc;
 using Interfaces.RequestBody;
 using DataBase.DAL;
+using Interfaces.DB;
+using Interfaces.DB.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -12,9 +13,9 @@ namespace DataSpeedrunsaver.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly SpeedrunContainer _speedrunContainer;
 
-        public SpeedrunController(ILogger<UserController> logger, DBSpeedrunsaverContext dbcontext)
+        public SpeedrunController(ILogger<UserController> logger, IDalFactory dalfactory)
         {
-            SpeedrunDAL speedrunDAL = new SpeedrunDAL(dbcontext);
+            ISpeedrunDAL speedrunDAL = dalfactory.GetSpeedrunDAL();
             _speedrunContainer = new SpeedrunContainer(speedrunDAL);
             _logger = logger;
         }

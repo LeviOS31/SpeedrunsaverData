@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DataBase.Data;
 using Logic.Container;
 using Interfaces.RequestBody;
-using DataBase.DAL;
+using Interfaces.DB;
+using Interfaces.DB.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -13,9 +13,9 @@ namespace DataSpeedrunsaver.Controllers
         private readonly ILogger<PlatformController> _logger;
         private readonly PlatformContainer _plaformContainer;
         
-        public PlatformController(ILogger<PlatformController> logger, DBSpeedrunsaverContext dbcontext) 
+        public PlatformController(ILogger<PlatformController> logger, IDalFactory dalFactory) 
         {
-            PlaformDAL plaformDAL = new PlaformDAL(dbcontext);
+            IPlatformDAL plaformDAL = dalFactory.GetPlatformDAL();
             _plaformContainer = new PlatformContainer(plaformDAL);
             _logger = logger;
         }

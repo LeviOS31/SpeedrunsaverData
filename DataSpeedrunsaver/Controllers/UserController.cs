@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DataBase.Data;
 using Logic.Container;
 using Interfaces.RequestBody;
 using DataBase.DAL;
 using Interfaces.DTO;
+using Interfaces.DB;
+using Interfaces.DB.DAL;
 
 namespace DataSpeedrunsaver.Controllers
 {
@@ -14,10 +15,10 @@ namespace DataSpeedrunsaver.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly UserContainer _userContainer;
 
-        public UserController(ILogger<UserController> logger, DBSpeedrunsaverContext dbcontext)
+        public UserController(ILogger<UserController> logger, IDalFactory dalFactory)
         {
-            UserDAL userdal = new UserDAL(dbcontext);
-            UserTokenDAL tokendal = new UserTokenDAL(dbcontext);
+            IUserDAL userdal = dalFactory.GetUserDAL();
+            IUserTokenDAL tokendal = dalFactory.GetUserTokenDAL();
             _userContainer = new UserContainer(userdal, tokendal);
             _logger = logger;
         }

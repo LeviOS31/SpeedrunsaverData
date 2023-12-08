@@ -1,7 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
-using Interfaces.DB;
 using DataBase.Data;
+using DataBase;
+using Interfaces.DB;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,8 @@ builder.Services.AddDbContext<DBSpeedrunsaverContext>(options =>
         @"Server=mssqlstud.fhict.local;Database=dbi512680_speedrun;User Id=dbi512680_speedrun;Password=Admin1234;TrustServerCertificate=True;"
 );
 });
+
+builder.Services.AddScoped<IDalFactory, DalFactory>();
 
 //builder.Services.AddSingleton<DBSpeedrunsaverContext>();
 
