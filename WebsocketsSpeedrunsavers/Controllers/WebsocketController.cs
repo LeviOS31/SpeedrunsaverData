@@ -21,7 +21,6 @@ namespace WebsocketttestAPI.Controllers
 
                 while (true)
                 {
-                    SqlDependency
 /*                  var message = "Hello from the server!";
                     var bytes = Encoding.UTF8.GetBytes(message);
                     var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);

@@ -26,7 +26,7 @@ builder.Services.AddDbContext<DBSpeedrunsaverContext>(options =>
 {
     options.UseSqlServer(
         @"Server=mssqlstud.fhict.local;Database=dbi512680_speedrun;User Id=dbi512680_speedrun;Password=Admin1234;TrustServerCertificate=True;"
-);
+    );
 });
 
 builder.Services.AddScoped<IDalFactory, DalFactory>();

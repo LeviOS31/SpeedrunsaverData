@@ -28,15 +28,4 @@ app.MapControllers();
 
 app.UseWebSockets();
 
-var dbContextOptions = new DbContextOptionsBuilder<DBSpeedrunsaverContext>()
-    .UseSqlServer(
-        @"Server=mssqlstud.fhict.local;Database=dbi512680_speedrun;User Id=dbi512680_speedrun;Password=Admin1234;TrustServerCertificate=True;"
-    )
-    .Options;
-
-DBSpeedrunsaverContext dbcontext = new DBSpeedrunsaverContext(dbContextOptions);
-
-var watcher = new Databasewatcher(dbcontext);
-watcher.StartWatching();
-
 app.Run();

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Logic.Container;
 using Interfaces.RequestBody;
-using DataBase.DAL;
 using Interfaces.DTO;
 using Interfaces.DB;
 using Interfaces.DB.DAL;
@@ -105,6 +104,38 @@ namespace DataSpeedrunsaver.Controllers
             {
                 Console.WriteLine(e);
                 return StatusCode(500, "Something went wrong when trying to validate user: " + e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("/User/Update/{userid}")]
+        public async Task<IActionResult> UpdateUser(int userid, [FromBody] UserBody body)
+        {
+            try
+            {
+                await _userContainer.UpdateUser(userid, body);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to update user: " + e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("/User/Delete/{userid}")]
+        public async Task<IActionResult> DeleteUser(int userid)
+        {
+            try
+            {
+                await _userContainer.DeleteUser(userid);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong when trying to delete user: " + e.Message);
             }
         }
     }
