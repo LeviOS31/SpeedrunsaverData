@@ -21,16 +21,6 @@ namespace WebsocketttestAPI.Controllers
 
                 while (true)
                 {
-/*                  var message = "Hello from the server!";
-                    var bytes = Encoding.UTF8.GetBytes(message);
-                    var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
-                    if (ws.State == WebSocketState.Open)
-                    {
-                        await ws.SendAsync(arraySegment,
-                                        WebSocketMessageType.Text,
-                                        true,
-                                        CancellationToken.None);
-                    }*/
                     if (ws.State == WebSocketState.Closed || ws.State == WebSocketState.Aborted)
                     {
                         break;
