@@ -18,13 +18,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     
-    - name: Build
-      run: dotnet build --no-restore
-
     - name: Run .NET Code Analysis
-      uses: dotnet/code-analysis@main
+      uses: dotnet/code-analysis@v1
       id: code-analysis
       with:
-        solution: DataSpeedrunsaver.sln
-        build-breaking: false
-        all-categories: all
+        build-breaking: true
+
