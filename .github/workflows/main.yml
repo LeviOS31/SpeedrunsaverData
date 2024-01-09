@@ -63,6 +63,3 @@ jobs:
       with:
         name: dependency-check-report
         path: reports/dependency-check-report.html
-
-    - name: Run Codacy Analysis CLI
-      uses: codacy/codacy-analysis-cli-action@master
