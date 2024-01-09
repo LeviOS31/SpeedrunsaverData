@@ -21,8 +21,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Run StyleCop.Analyzers
-      run: dotnet stylecop
-
-    - name: Display StyleCop results
-      run: cat stylecop-report.xml || true
+    - name: Run .NET Code Analysis
+      uses: dotnet/code-analysis@v1
+      id: code-analysis
+      with:
+        solution: DataSpeedrunsaver.sln
+        build-breaking: false
+        all-categories: all
