@@ -14,13 +14,14 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: 7.x.x
+        
     - name: Restore dependencies
       run: dotnet restore
-    
-    - name: Run .NET Code Analysis
-      uses: dotnet/code-analysis@main
-      id: code-analysis
-      with:
-        build-breaking: false
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Run StyleCop Analysis
+      run: dotnet build /p:RunAnalyzersDuringBuild=true
 
